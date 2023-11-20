@@ -1,0 +1,111 @@
+plugins {
+    id "java-library"
+    id "maven-publish"
+    id "checkstyle"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withJavadocJar()
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        // systemProp.mvn.deploy.url=url in c:\Users\<user>\.gradle\gradle.properties
+        url = uri(System.getProperty("mvn.publish.url"))
+        credentials {
+            username = System.getProperty("mvn.publish.username")
+            password = System.getProperty("mvn.publish.password")
+        }
+    }
+}
+
+configurations {
+    checkstyleConfig
+}
+
+configurations.configureEach { resolutionStrategy.cacheChangingModulesFor(24, "hours") }
+
+dependencies {
+    testImplementation("junit:junit:4.13.1")
+    checkstyleConfig("by.gto.library:checkstyle-config:+@zip").changing = true
+}
+
+tasks.named("compileJava").configure {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType(Javadoc).configureEach {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType(Jar).configureEach {
+    dependsOn(test, check)
+    manifest {
+        attributes(["Created-By"            : "gradle",
+                    "Build-Jdk-Spec"        : JavaVersion.current(),
+                    "Implementation-Version": project.version]
+        )
+    }
+}
+
+tasks.named("javadoc") {
+    (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+}
+
+publishing {
+    publications {
+        autoCloseableHelper(MavenPublication) {
+            from(components["java"])
+            pom {
+                name.set(project.name)
+                description.set(project.description)
+                licenses {
+                    license {
+                        name.set("GNU Lesser General Public License")
+                        url.set("http://gto.by")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("ltv")
+                        name.set("Tim Lukashevich")
+                        email.set("silvernet@yandex.ru")
+                        organization.set("BTO Corporation")
+                        organizationUrl.set("http://www.gto.by")
+                        roles.add("architect")
+                        roles.add("developer")
+                        timezone.set("+3")
+                    }
+                }
+                // scm {
+                //     connection.set("scm:git:ssh://git@git.gto.by:22005/var/gitroot/ltv/java/bto-library.git")
+                //     developerConnection.set("scm:git:ssh://git@git.gto.by:22005/var/gitroot/ltv/java/bto-library.git")
+                // }
+            }
+        }
+    }
+    repositories {
+        maven {
+            // systemProp.mvn.deploy.url=url in c:\Users\<user>\.gradle\gradle.properties
+            url = uri(System.getProperty("mvn.publish.password"))
+            credentials {
+                username = System.getProperty("mvn.publish.username")
+                password = System.getProperty("mvn.publish.password")
+            }
+        }
+    }
+}
+
+checkstyle {
+    toolVersion = "8.27"
+    // checkstyle.xml copy from:
+    // https://raw.githubusercontent.com/checkstyle/checkstyle/checkstyle-8.6/src/main/resources/google_checks.xml
+    // the version should be as same as plugin version
+//    configFile = rootProject.file("config/checkstyle/checkstyle.xml")
+    config = resources.text.fromArchiveEntry(
+            configurations.checkstyleConfig, "checkstyle.xml")
+}
