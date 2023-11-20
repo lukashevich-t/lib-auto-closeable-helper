@@ -23,9 +23,7 @@ repositories {
     }
 }
 
-configurations {
-    checkstyleConfig
-}
+configurations { checkstyleConfig }
 
 configurations.configureEach { resolutionStrategy.cacheChangingModulesFor(24, "hours") }
 
@@ -81,17 +79,13 @@ publishing {
                         timezone.set("+3")
                     }
                 }
-                // scm {
-                //     connection.set("scm:git:ssh://git@git.gto.by:22005/var/gitroot/ltv/java/bto-library.git")
-                //     developerConnection.set("scm:git:ssh://git@git.gto.by:22005/var/gitroot/ltv/java/bto-library.git")
-                // }
             }
         }
     }
     repositories {
         maven {
             // systemProp.mvn.deploy.url=url in c:\Users\<user>\.gradle\gradle.properties
-            url = uri(System.getProperty("mvn.publish.password"))
+            url = uri(System.getProperty("mvn.publish.url"))
             credentials {
                 username = System.getProperty("mvn.publish.username")
                 password = System.getProperty("mvn.publish.password")
