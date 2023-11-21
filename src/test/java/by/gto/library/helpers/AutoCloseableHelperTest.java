@@ -17,7 +17,7 @@ public class AutoCloseableHelperTest {
             try (AutoCloseableHelper ach = new AutoCloseableHelper()) {
                 MyCloseable c1 = ach.add(new MyCloseable(openCloseOrder));
                 MyCloseable c2 = ach.add(new MyCloseable(openCloseOrder));
-                ach.closeAndForget(c1);
+                ach.remove(c1, true);
             } catch (Exception ignored) {
             }
             Assert.assertEquals(Arrays.asList(1, 2, -1, -2), openCloseOrder);
@@ -47,7 +47,7 @@ public class AutoCloseableHelperTest {
                     if (i >= 1) {
                         throw new ParseException("1", 1);
                     }
-                    ach.closeAndForget(c);
+                    ach.remove(c, true);
                 }
             } catch (Exception ignored) {
             }

@@ -41,6 +41,7 @@ public final class AutoCloseableHelper implements AutoCloseable {
      * Добавить ресурс в список на автозакрытие. Если ресурс == null, он НЕ ДОБАВЛЯЕТСЯ в список.
      * Повторное добавление того же ресурса не отслеживается.
      * @param autoCloseable добавляемый ресурс
+     * @param <R> тип ресурса
      * @return добавляемый ресурс (просто для удобства)
      */
     public <R extends AutoCloseable> R add(R autoCloseable) {
