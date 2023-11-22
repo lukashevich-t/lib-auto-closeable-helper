@@ -11,6 +11,11 @@ java {
     withSourcesJar()
 }
 
+ext {
+    V_JUNIT = "4.13.1"
+    V_JETBRAINS_ANNOTATIONS = "18.0.0"
+}
+
 repositories {
     mavenCentral()
     maven {
@@ -28,7 +33,9 @@ configurations { checkstyleConfig }
 configurations.configureEach { resolutionStrategy.cacheChangingModulesFor(24, "hours") }
 
 dependencies {
-    testImplementation("junit:junit:4.13.1")
+    def ext = rootProject.ext
+    implementation("org.jetbrains:annotations:${ext.V_JETBRAINS_ANNOTATIONS}")
+    testImplementation("junit:junit:${ext.V_JUNIT}")
     checkstyleConfig("by.gto.library:checkstyle-config:+@zip").changing = true
 }
 
