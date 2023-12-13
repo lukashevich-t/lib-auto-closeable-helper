@@ -43,6 +43,10 @@ tasks.named("compileJava").configure {
     options.encoding = "UTF-8"
 }
 
+tasks.named("compileTestJava").configure {
+    options.encoding = "UTF-8"
+}
+
 tasks.withType(Javadoc).configureEach {
     options.encoding = "UTF-8"
 }
