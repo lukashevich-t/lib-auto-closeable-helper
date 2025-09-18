@@ -34,7 +34,7 @@ configurations.configureEach { resolutionStrategy.cacheChangingModulesFor(24, "h
 
 dependencies {
     def ext = rootProject.ext
-    implementation("org.jetbrains:annotations:${ext.V_JETBRAINS_ANNOTATIONS}")
+    compileOnly("org.jetbrains:annotations:${ext.V_JETBRAINS_ANNOTATIONS}")
     testImplementation("junit:junit:${ext.V_JUNIT}")
     checkstyleConfig("by.gto.library:checkstyle-config:+@zip").changing = true
 }
