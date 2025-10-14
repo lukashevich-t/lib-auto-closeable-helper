@@ -19,11 +19,11 @@ ext {
 repositories {
     mavenCentral()
     maven {
-        // systemProp.mvn.deploy.url=url in c:\Users\<user>\.gradle\gradle.properties
-        url = uri(System.getProperty("mvn.publish.url"))
+        name = "GitHubPackages"
+        url = uri(System.getProperty("github.packages.url"))
         credentials {
-            username = System.getProperty("mvn.publish.username")
-            password = System.getProperty("mvn.publish.password")
+            username = System.getProperty("github.packages.readonly.username")
+            password = System.getProperty("github.packages.readonly.password")
         }
     }
 }
@@ -72,12 +72,6 @@ publishing {
             pom {
                 name.set(project.name)
                 description.set(project.description)
-                licenses {
-                    license {
-                        name.set("GNU Lesser General Public License")
-                        url.set("http://gto.by")
-                    }
-                }
                 developers {
                     developer {
                         id.set("ltv")
@@ -93,13 +87,14 @@ publishing {
             }
         }
     }
+
     repositories {
         maven {
-            // systemProp.mvn.deploy.url=url in c:\Users\<user>\.gradle\gradle.properties
-            url = uri(System.getProperty("mvn.publish.url"))
+            name = "GitHubPackages"
+            url = uri(System.getProperty("github.packages.url"))
             credentials {
-                username = System.getProperty("mvn.publish.username")
-                password = System.getProperty("mvn.publish.password")
+                username = System.getProperty("github.packages.publish.username")
+                password = System.getProperty("github.packages.publish.password")
             }
         }
     }
